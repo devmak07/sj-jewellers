@@ -27,8 +27,8 @@ SECRET_KEY = 'django-insecure-im!2kks6hrccpoh%tt29cxukp$be(_peb$y984dlnkt3#t0@t%
 DEBUG = True
 
 ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False  # Temporarily disabled for Render debug
+CSRF_COOKIE_SECURE = False    # Temporarily disabled for Render debug
 # (Optional, but recommended for production)
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
