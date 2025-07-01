@@ -26,7 +26,12 @@ SECRET_KEY = 'django-insecure-im!2kks6hrccpoh%tt29cxukp$be(_peb$y984dlnkt3#t0@t%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+# (Optional, but recommended for production)
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 
 
 # Application definition
