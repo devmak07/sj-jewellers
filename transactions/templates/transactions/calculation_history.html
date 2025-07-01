@@ -1,0 +1,55 @@
+{% extends "transactions/base.html" %}
+{% block content %}
+  <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+    <div class="flex items-center gap-3">
+      <span class="inline-block w-10 h-10 rounded-full bg-gradient-to-br from-goldAccent to-goldLight flex items-center justify-center shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-goldDark">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75h19.5m-17.25 0l7.5-13.5 7.5 13.5m-13.5 0h12" />
+        </svg>
+      </span>
+      <span class="text-2xl sm:text-3xl font-extrabold text-goldAccent tracking-tight drop-shadow">Calculation History</span>
+    </div>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <a href="{% url 'transactions_tabs' %}" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">Dashboard</a>
+      <a href="/calculation/" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">New Calc</a>
+    </div>
+  </div>
+  {% if calc_saved %}
+    <div id="calc-saved-msg" class="p-3 rounded bg-gold text-zinc-900 shadow border-2 border-goldDark font-semibold text-center mb-3">
+      Calculation saved successfully!
+    </div>
+    <script>
+      setTimeout(function() {
+        var msg = document.getElementById('calc-saved-msg');
+        if (msg) msg.style.display = 'none';
+      }, 3000);
+    </script>
+  {% endif %}
+  <div class="overflow-x-auto">
+    <table class="min-w-full bg-zinc-900 border-2 border-goldLight rounded-lg">
+      <thead>
+        <tr class="bg-goldLight text-zinc-900">
+          <th class="py-2 px-4 border-b-2 border-goldAccent text-xs sm:text-sm">Name</th>
+          <th class="py-2 px-4 border-b-2 border-goldAccent text-xs sm:text-sm">Date</th>
+          <th class="py-2 px-4 border-b-2 border-goldAccent text-xs sm:text-sm">Total</th>
+          <th class="py-2 px-4 border-b-2 border-goldAccent text-xs sm:text-sm">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for calc in calculations %}
+        <tr class="hover:bg-goldLighter/40 transition-colors">
+          <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">{{ calc.name }}</td>
+          <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">{{ calc.created_at|date:"Y-m-d H:i" }}</td>
+          <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">{{ calc.total }}</td>
+          <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">
+            <a href="{% url 'calculation_pdf' %}?id={{ calc.id }}" class="w-full sm:w-auto px-2 py-1 rounded bg-goldAccent text-zinc-900 font-bold border border-goldAccent hover:bg-goldDark transition">Print/Export PDF</a>
+            <a href="{% url 'delete_calculation_history' calc.id %}" class="w-full sm:w-auto px-2 py-1 rounded bg-red-500 text-white font-bold border border-red-700 hover:bg-red-700 ml-2">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center p-4 text-zinc-400">No calculations found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %} 

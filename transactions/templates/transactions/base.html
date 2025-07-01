@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GoldBook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+      setTimeout(() => {
+        document.querySelectorAll('[class*="fixed"]').forEach(el => el.remove());
+      }, 3000);
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: '#FFD700',
+              goldLight: '#FFF9C4',
+              goldLighter: '#FFFDE7',
+              goldAccent: '#FFE066',
+              goldDark: '#B8860B',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      input, select, textarea {
+        color: #FFD700 !important;
+        background-color: #23232b !important;
+        border: 1.5px solid #FFD700 !important;
+      }
+      input[type="text"], input[type="number"], input[type="date"] {
+        color: #FFD700 !important;
+        background-color: #23232b !important;
+        border: 1.5px solid #FFD700 !important;
+      }
+      input:focus, select:focus, textarea:focus {
+        outline: 2px solid #FFD700 !important;
+        background-color: #18181b !important;
+        border: 2px solid #FFD700 !important;
+      }
+      ::placeholder {
+        color: #ffe066 !important;
+        opacity: 1;
+      }
+    </style>
+</head>
+<body class="bg-zinc-900 text-zinc-100 min-h-screen font-sans">
+  <input type="hidden" id="global-csrf-token" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  {% if messages %}
+    <div class="fixed top-4 right-4 z-50 space-y-2">
+      {% for message in messages %}
+        <div class="p-3 rounded bg-gold text-zinc-900 shadow border-2 border-goldDark font-semibold">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="container mx-auto p-2 sm:p-4 max-w-full sm:max-w-5xl">
+    <div class="flex justify-end mb-2">
+      <a href="{% url 'admin_logout' %}" class="px-4 py-2 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors">Logout</a>
+    </div>
+    <div class="bg-zinc-900 rounded-lg shadow-lg p-2 sm:p-8 border-2 border-gold/40">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

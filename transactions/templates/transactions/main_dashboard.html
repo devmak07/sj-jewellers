@@ -1,0 +1,50 @@
+{% extends "transactions/base.html" %}
+{% block content %}
+  <div class="flex flex-col items-center justify-center min-h-[60vh] gap-10">
+    <div class="glassy-dashboard-card w-full max-w-2xl flex flex-col items-center py-10 px-6 sm:px-12">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="inline-block w-12 h-12 rounded-full bg-gradient-to-br from-goldAccent to-goldLight flex items-center justify-center shadow-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-9 h-9 text-goldDark">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75h19.5m-17.25 0l7.5-13.5 7.5 13.5m-13.5 0h12" />
+          </svg>
+        </span>
+        <span class="text-4xl font-extrabold text-black tracking-tight drop-shadow"><h1>SJ Jewellers Dashboard</h1></span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
+        <a href="/transactions/" class="block p-8 rounded-lg border-2 border-goldAccent bg-goldLight text-zinc-900 font-bold text-2xl text-center shadow hover:bg-goldAccent transition-colors">Transactions</a>
+        <a href="/goldapp/" class="block p-8 rounded-lg border-2 border-goldAccent bg-goldLight text-zinc-900 font-bold text-2xl text-center shadow hover:bg-goldAccent transition-colors">GoldApp</a>
+      </div>
+    </div>
+  </div>
+  <style>
+    .glassy-dashboard-card {
+      background: rgba(24, 24, 27, 0.60);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      border-radius: 1.5rem;
+      border: 3px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px 0 rgba(255, 215, 0, 0.18);
+    }
+    .glassy-dashboard-card:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      padding: 2px;
+      background: linear-gradient(120deg, #FFD700, #B8860B, #FFD700, #FFF9C4, #FFD700);
+      background-size: 400% 400%;
+      animation: goldBorder 6s ease infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glassy-dashboard-card > * { position: relative; z-index: 1; }
+    @keyframes goldBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+  </style>
+{% endblock %} 

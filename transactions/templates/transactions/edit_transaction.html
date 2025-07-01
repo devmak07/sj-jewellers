@@ -1,0 +1,11 @@
+{% extends "transactions/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h2 class="text-2xl font-bold mb-6 text-gold drop-shadow">Edit Transaction</h2>
+  <form method="post" class="bg-zinc-900 p-4 rounded shadow border-2 border-gold/40">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="bg-gold hover:bg-goldDark text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldDark shadow">Save</button>
+    <a href="{% url 'transactions_tabs' %}" class="ml-2 text-gold hover:text-goldDark">Cancel</a>
+  </form>
+{% endblock %} 

@@ -1,0 +1,10 @@
+{% extends "transactions/base.html" %}
+{% block content %}
+  <h2 class="text-2xl font-bold mb-6 text-gold drop-shadow">Delete Transaction</h2>
+  <p class="mb-4 text-zinc-300">Are you sure you want to delete the transaction for <strong>{{ txn.carrier_name }}</strong>?</p>
+  <form method="post" class="inline">
+    {% csrf_token %}
+    <button type="submit" class="bg-gold hover:bg-goldDark text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldDark shadow">Delete</button>
+    <a href="{% url 'transactions_tabs' %}" class="ml-2 text-gold hover:text-goldDark">Cancel</a>
+  </form>
+{% endblock %} 

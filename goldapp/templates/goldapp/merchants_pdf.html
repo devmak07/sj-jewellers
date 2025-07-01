@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Merchants PDF</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #888; padding: 8px; text-align: left; }
+        th { background: #FFD700; }
+    </style>
+</head>
+<body>
+    <h2>Merchant Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Touch</th>
+                <th>Net Weight</th>
+                <th>Gross Weight</th>
+                <th>PC</th>
+                <th>Item</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for m in merchants %}
+            <tr>
+                <td>{{ m.name }}</td>
+                <td>{{ m.touch }}</td>
+                <td>{{ m.Netwet }}</td>
+                <td>{{ m.Gowet }}</td>
+                <td>{{ m.PC }}</td>
+                <td>{{ m.Item }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html> 

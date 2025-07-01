@@ -1,0 +1,79 @@
+{% extends "transactions/base.html" %}
+{% block content %}
+  <div class="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
+    <div class="flex items-center gap-3">
+      <span class="inline-block w-10 h-10 rounded-full bg-gradient-to-br from-goldAccent to-goldLight flex items-center justify-center shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7 text-goldDark">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75h19.5m-17.25 0l7.5-13.5 7.5 13.5m-13.5 0h12" />
+        </svg>
+      </span>
+      <span class="text-2xl sm:text-3xl font-extrabold text-goldAccent tracking-tight drop-shadow">GoldBook Calculator</span>
+    </div>
+    <div class="flex items-center gap-2 w-full sm:w-auto">
+      <a href="/" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">Dashboard</a>
+    </div>
+  </div>
+  <div class="mb-6">
+    {% if error %}
+      <div class="p-3 rounded bg-red-700 text-red-100 border border-red-400 mb-4">{{ error }}</div>
+    {% endif %}
+    {% if ended %}
+      <div class="p-4 rounded bg-goldAccent text-zinc-900 font-bold text-center">Calculation Ended</div>
+    {% else %}
+      {% if not calc.name %}
+        <form method="post" class="space-y-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-goldAccent font-semibold">Name:</label>
+            <input type="text" name="name" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
+          </div>
+          <div>
+            <label class="block text-goldAccent font-semibold">Initial Amount:</label>
+            <input type="number" step="any" name="amount" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
+          </div>
+          <button type="submit" name="start" class="bg-goldAccent hover:bg-goldLight text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldAccent shadow">Start Calculation</button>
+        </form>
+      {% else %}
+        <div class="mb-4">
+          <div class="text-lg text-goldAccent font-bold">Name: {{ calc.name }}</div>
+          <div class="text-lg text-goldAccent font-bold">Current Total: <span class="text-white">{{ calc.total }}</span></div>
+        </div>
+        <form method="post" class="flex flex-wrap gap-4 items-end mb-4">
+          {% csrf_token %}
+          <div>
+            <label class="block text-goldAccent font-semibold">Operation:</label>
+            <select name="operation" class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent">
+              <option value="add">Add (+)</option>
+              <option value="subtract">Subtract (-)</option>
+              <option value="multiply">Multiply (×)</option>
+              <option value="divide">Divide (÷)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-goldAccent font-semibold">Amount:</label>
+            <input type="number" step="any" name="next_amount" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
+          </div>
+          <div>
+            <label class="block text-goldAccent font-semibold">Label/Description:</label>
+            <input type="text" name="label" class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
+          </div>
+          <button type="submit" name="continue" class="bg-goldAccent hover:bg-goldLight text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldAccent shadow">Continue Calculation</button>
+          <button type="submit" name="end" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded font-bold border-2 border-red-700 shadow">End Calculation</button>
+        </form>
+        <div class="mb-4">
+          <div class="text-lg font-bold text-goldAccent mb-2">Calculation History:</div>
+          <ul class="bg-zinc-800 rounded p-4 border border-goldAccent text-goldAccent space-y-2">
+            {% for line in history_strings %}
+              <li class="text-white">{{ line }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <form method="get" action="{% url 'calculation_pdf' %}">
+          <button type="submit" class="bg-goldAccent hover:bg-goldLight text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldAccent shadow mt-4">
+            Export as PDF
+          </button>
+        </form>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endblock %} 
