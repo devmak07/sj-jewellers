@@ -2,5 +2,5 @@ Django>=5.2
 gunicorn
 whitenoise
 crispy-bootstrap5
-crispy-forms
+django-crispy-forms
 xhtml2pdf 
