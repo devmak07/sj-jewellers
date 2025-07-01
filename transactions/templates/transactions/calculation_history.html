@@ -43,7 +43,9 @@
           <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">{{ calc.total }}</td>
           <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">
             <a href="{% url 'calculation_pdf' %}?id={{ calc.id }}" class="w-full sm:w-auto px-2 py-1 rounded bg-goldAccent text-zinc-900 font-bold border border-goldAccent hover:bg-goldDark transition">Print/Export PDF</a>
+            {% if request.session.role != 'viewer' %}
             <a href="{% url 'delete_calculation_history' calc.id %}" class="w-full sm:w-auto px-2 py-1 rounded bg-red-500 text-white font-bold border border-red-700 hover:bg-red-700 ml-2">Delete</a>
+            {% endif %}
           </td>
         </tr>
         {% empty %}

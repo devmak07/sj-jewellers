@@ -12,6 +12,8 @@ def index(request):
     query=""
     
     if request.method=='POST':
+        if request.session.get('role') == 'viewer':
+            return HttpResponse('Viewers cannot modify data.', status=403)
         if "add" in request.POST:
             name=request.POST.get('name')
             touch=request.POST.get('touch')
@@ -58,13 +60,13 @@ def index(request):
             query=request.POST.get("searchquery")
             merchant=Merchant.objects.filter(Q(name__icontains=query)|Q(Item__icontains=query))
 
-
-
     context={'merchant':merchant,"query":query}
     return render(request,'index.html',context=context)
 
 @csrf_exempt
 def download_merchants_pdf(request):
+    if request.session.get('role') == 'viewer':
+        return HttpResponse('Viewers cannot download PDF.', status=403)
     if request.method == 'POST':
         ids = request.POST.getlist('merchant_ids')
         merchants = Merchant.objects.filter(id__in=ids)

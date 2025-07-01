@@ -30,4 +30,8 @@ def admin_login(request):
 
 def admin_logout(request):
     request.session.flush()
-    return redirect('admin_login') 
+    return redirect('admin_login')
+
+def test_session(request):
+    request.session['test'] = 'hello'
+    return HttpResponse(f"Session value: {request.session.get('test')}") 

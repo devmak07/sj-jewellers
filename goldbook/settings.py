@@ -27,8 +27,15 @@ SECRET_KEY = 'django-insecure-im!2kks6hrccpoh%tt29cxukp$be(_peb$y984dlnkt3#t0@t%
 DEBUG = True
 
 ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
-SESSION_COOKIE_SECURE = False  # Temporarily disabled for Render debug
-CSRF_COOKIE_SECURE = False    # Temporarily disabled for Render debug
+
+# Render/production security settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True      # Set to True for production
+CSRF_COOKIE_SECURE = True        # Set to True for production
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_TRUSTED_ORIGINS = ['https://sj-jewellers.onrender.com']  # Replace with your actual Render URL if different
+SECURE_SSL_REDIRECT = True       # Optional, but recommended
+
 # (Optional, but recommended for production)
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True

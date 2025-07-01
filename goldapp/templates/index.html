@@ -73,7 +73,9 @@
       {% endif %}
       <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
         <h1 class="text-xl sm:text-2xl font-bold text-goldAccent">Order Management System</h1>
+        {% if request.session.role != 'viewer' %}
         <button onclick="document.getElementById('additemModal').classList.remove('hidden')" class="w-full sm:w-auto bg-goldAccent hover:bg-goldLight text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldAccent shadow transition">Add New Detail</button>
+        {% endif %}
       </div>
       <form method="post" class="flex flex-col sm:flex-row items-center gap-2 mb-6 w-full">
         {% csrf_token %}
@@ -111,10 +113,15 @@
               <td class="py-2 px-4 border-b border-gold/30">{{m.PC}}</td>
               <td class="py-2 px-4 border-b border-gold/30">{{m.Item}}</td>
               <td class="py-2 px-4 border-b border-gold/30">
-                <button type="button" onclick="document.getElementById('updateitemModal_{{m.id}}').classList.remove('hidden')" class="px-2 py-1 rounded text-white bg-green-600 hover:bg-green-700 font-semibold transition-colors">Edit</button>
-                <button type="button" onclick="document.getElementById('deleteitemModal_{{m.id}}').classList.remove('hidden')" class="px-2 py-1 rounded text-white bg-red-500 hover:bg-red-700 font-semibold transition-colors ml-2">Delete</button>
+                <div class="flex gap-2">
+                    {% if request.session.role != 'viewer' %}
+                    <button type="button" onclick="document.getElementById('updateitemModal_{{m.id}}').classList.remove('hidden')" class="text-blue-700 font-semibold transition-colors">Edit</button>
+                    <button type="button" onclick="document.getElementById('deleteitemModal_{{m.id}}').classList.remove('hidden')" class="px-2 py-1 rounded text-white bg-red-500 hover:bg-red-700 font-semibold transition-colors ml-2">Delete</button>
+                    {% endif %}
+                </div>
               </td>
             </tr>
+            {% if request.session.role != 'viewer' %}
             <!-- Update Modal -->
             <div id="updateitemModal_{{m.id}}" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
               <div class="modal-content bg-zinc-900 p-6 rounded-lg border-2 border-goldAccent w-full max-w-md">
@@ -158,10 +165,12 @@
                 </form>
               </div>
             </div>
+            {% endif %}
             {% endfor %}
           </tbody>
         </table>
       </div>
+      {% if request.session.role != 'viewer' %}
       <!-- Add Modal -->
       <div id="additemModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-zinc-900 p-6 rounded-lg border-2 border-goldAccent w-full max-w-md">
@@ -189,6 +198,7 @@
           </form>
         </div>
       </div>
+      {% endif %}
     </div>
   </div>
   <script>

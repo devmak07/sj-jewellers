@@ -7,9 +7,7 @@ class AdminAuthMiddleware:
 
     def __call__(self, request):
         allowed_paths = [reverse('admin_login'), reverse('admin_logout')]
-        if not request.session.get('is_admin') and request.path not in allowed_paths:
-            if request.path == '/':
-                return redirect('admin_login')
+        if not request.session.get('is_authenticated') and request.path not in allowed_paths:
             return redirect('admin_login')
         response = self.get_response(request)
         return response 
