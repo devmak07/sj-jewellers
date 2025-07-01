@@ -9,6 +9,9 @@ from xhtml2pdf import pisa
 import io
 import json
 from django.db import models
+import logging
+
+logger = logging.getLogger(__name__)
 
 def transactions_tabs(request):
     active_tab = request.GET.get("tab", "given")
@@ -57,6 +60,7 @@ def transactions_tabs(request):
     return render(request, "transactions/transactions_tabs.html", context)
 
 def edit_transaction(request, pk):
+    logger.warning("edit_transaction: session role = %s", request.session.get('role'))
     if request.session.get('role') == 'viewer':
         return HttpResponseForbidden('Viewers cannot modify data.')
     txn = get_object_or_404(Transaction, pk=pk)
