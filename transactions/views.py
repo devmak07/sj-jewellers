@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Transaction, CalculationHistory
 from .forms import AddTransactionForm
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
@@ -57,6 +57,8 @@ def transactions_tabs(request):
     return render(request, "transactions/transactions_tabs.html", context)
 
 def edit_transaction(request, pk):
+    if request.session.get('role') == 'viewer':
+        return HttpResponseForbidden('Viewers cannot modify data.')
     txn = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         form = AddTransactionForm(request.POST, instance=txn)
@@ -69,6 +71,8 @@ def edit_transaction(request, pk):
     return render(request, "transactions/edit_transaction.html", {"form": form, "txn": txn})
 
 def delete_transaction(request, pk):
+    if request.session.get('role') == 'viewer':
+        return HttpResponseForbidden('Viewers cannot modify data.')
     txn = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         txn.delete()
@@ -166,6 +170,8 @@ def calculation(request):
     return render(request, 'transactions/calculation.html', {'calc': calc, 'error': error, 'history_strings': history_strings})
 
 def calculation_pdf(request):
+    if request.session.get('role') == 'viewer':
+        return HttpResponseForbidden('Viewers cannot download PDF.')
     import json as _json
     calc_id = request.GET.get('id')
     if calc_id:
@@ -201,6 +207,8 @@ def main_dashboard(request):
     return render(request, 'transactions/main_dashboard.html')
 
 def delete_calculation_history(request, pk):
+    if request.session.get('role') == 'viewer':
+        return HttpResponseForbidden('Viewers cannot modify data.')
     calc = get_object_or_404(CalculationHistory, pk=pk)
     if request.method == "POST":
         calc.delete()
