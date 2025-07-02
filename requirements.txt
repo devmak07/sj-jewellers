@@ -3,4 +3,6 @@ gunicorn
 whitenoise
 crispy-bootstrap5
 django-crispy-forms
-xhtml2pdf 
+xhtml2pdf
+psycopg2-binary
+dj-database-url 
