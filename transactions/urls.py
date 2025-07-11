@@ -10,5 +10,6 @@ urlpatterns = [
     path('calculation/', views.calculation, name='calculation'),
     path('calculation/pdf/', views.calculation_pdf, name='calculation_pdf'),
     path('calculation/history/', views.calculation_history, name='calculation_history'),
+    path('calculation/history/pdf/', views.calculation_history_pdf, name='calculation_history_pdf'),
     path('calculation/delete/<int:pk>/', views.delete_calculation_history, name='delete_calculation_history'),
 ]

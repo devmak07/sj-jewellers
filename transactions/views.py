@@ -61,8 +61,6 @@ def transactions_tabs(request):
 
 def edit_transaction(request, pk):
     logger.warning("edit_transaction: session role = %s", request.session.get('role'))
-    if request.session.get('role') == 'viewer':
-        return HttpResponseForbidden('Viewers cannot modify data.')
     txn = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         form = AddTransactionForm(request.POST, instance=txn)
@@ -75,8 +73,6 @@ def edit_transaction(request, pk):
     return render(request, "transactions/edit_transaction.html", {"form": form, "txn": txn})
 
 def delete_transaction(request, pk):
-    if request.session.get('role') == 'viewer':
-        return HttpResponseForbidden('Viewers cannot modify data.')
     txn = get_object_or_404(Transaction, pk=pk)
     if request.method == "POST":
         txn.delete()
@@ -174,8 +170,6 @@ def calculation(request):
     return render(request, 'transactions/calculation.html', {'calc': calc, 'error': error, 'history_strings': history_strings})
 
 def calculation_pdf(request):
-    if request.session.get('role') == 'viewer':
-        return HttpResponseForbidden('Viewers cannot download PDF.')
     import json as _json
     calc_id = request.GET.get('id')
     if calc_id:
@@ -207,12 +201,37 @@ def calculation_history(request):
     calc_saved = request.session.pop('calc_saved', False)
     return render(request, 'transactions/calculation_history.html', {'calculations': calculations, 'calc_saved': calc_saved})
 
+def calculation_history_pdf(request):
+    import json as _json
+    calculations = CalculationHistory.objects.all().order_by('-created_at')
+    calc_list = []
+    for calc_obj in calculations:
+        calc = {
+            'name': calc_obj.name,
+            'total': calc_obj.total,
+            'history': _json.loads(calc_obj.history),
+        }
+        history_strings = []
+        for idx, entry in enumerate(calc.get('history', [])):
+            if idx == 0:
+                history_strings.append(f"{entry[0]}: {entry[1]}")
+            else:
+                op, value, label, prev_total, new_total = entry
+                op_symbol = {'add': '+', 'subtract': '-', 'multiply': '×', 'divide': '÷'}.get(op, op)
+                label_str = f" ({label})" if label else ""
+                history_strings.append(f"{prev_total:.2f} {op_symbol} {value:.2f} = {new_total:.2f}{label_str}")
+        calc['history_strings'] = history_strings
+        calc_list.append(calc)
+    html = render_to_string('transactions/calculation_history_pdf.html', {'calculations': calc_list})
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="calculation_history.pdf"'
+    pisa.CreatePDF(io.StringIO(html), dest=response)
+    return response
+
 def main_dashboard(request):
     return render(request, 'transactions/main_dashboard.html')
 
 def delete_calculation_history(request, pk):
-    if request.session.get('role') == 'viewer':
-        return HttpResponseForbidden('Viewers cannot modify data.')
     calc = get_object_or_404(CalculationHistory, pk=pk)
     if request.method == "POST":
         calc.delete()

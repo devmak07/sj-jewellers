@@ -73,9 +73,7 @@
       {% endif %}
       <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
         <h1 class="text-xl sm:text-2xl font-bold text-goldAccent">Order Management System</h1>
-        {% if request.session.role != 'viewer' %}
         <button onclick="document.getElementById('additemModal').classList.remove('hidden')" class="w-full sm:w-auto bg-goldAccent hover:bg-goldLight text-zinc-900 px-4 py-2 rounded font-bold border-2 border-goldAccent shadow transition">Add New Detail</button>
-        {% endif %}
       </div>
       <form method="post" class="flex flex-col sm:flex-row items-center gap-2 mb-6 w-full">
         {% csrf_token %}
@@ -114,14 +112,11 @@
               <td class="py-2 px-4 border-b border-gold/30">{{m.Item}}</td>
               <td class="py-2 px-4 border-b border-gold/30">
                 <div class="flex gap-2">
-                    {% if request.session.role != 'viewer' %}
                     <button type="button" onclick="document.getElementById('updateitemModal_{{m.id}}').classList.remove('hidden')" class="text-blue-700 font-semibold transition-colors">Edit</button>
                     <button type="button" onclick="document.getElementById('deleteitemModal_{{m.id}}').classList.remove('hidden')" class="px-2 py-1 rounded text-white bg-red-500 hover:bg-red-700 font-semibold transition-colors ml-2">Delete</button>
-                    {% endif %}
                 </div>
               </td>
             </tr>
-            {% if request.session.role != 'viewer' %}
             <!-- Update Modal -->
             <div id="updateitemModal_{{m.id}}" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
               <div class="modal-content bg-zinc-900 p-6 rounded-lg border-2 border-goldAccent w-full max-w-md">
@@ -165,40 +160,27 @@
                 </form>
               </div>
             </div>
-            {% endif %}
             {% endfor %}
           </tbody>
         </table>
       </div>
-      {% if request.session.role != 'viewer' %}
       <!-- Add Modal -->
-      <div id="additemModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-zinc-900 p-6 rounded-lg border-2 border-goldAccent w-full max-w-md">
+      <div id="additemModal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="modal-content bg-zinc-900 p-6 rounded-lg border-2 border-goldAccent w-full max-w-md">
           <form method="POST" action="">
             {% csrf_token %}
             <h2 class="text-xl font-bold text-goldAccent mb-4">Add New Item</h2>
-            <div class="space-y-3">
-              <label for="name_add" class="block text-goldAccent font-semibold">Parcel Name:</label>
-              <input type="text" id="name_add" name="name" maxlength="30" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
-              <label for="touch_add" class="block text-goldAccent font-semibold">Parcel Touch:</label>
-              <input type="number" step="any" id="touch_add" name="touch" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
-              <label for="Netwet_add" class="block text-goldAccent font-semibold">Net Weight:</label>
-              <input type="number" step="any" id="Netwet_add" name="Netwet" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
-              <label for="Gowet_add" class="block text-goldAccent font-semibold">Gross Weight:</label>
-              <input type="number" step="any" id="Gowet_add" name="Gowet" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
-              <label for="PC_add" class="block text-goldAccent font-semibold">Item PC:</label>
-              <input type="number" id="PC_add" name="PC" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent" />
-              <label for="Item_add" class="block text-goldAccent font-semibold">Item Description:</label>
-              <textarea id="Item_add" name="Item" maxlength="100" required class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent"></textarea>
+            <div class="mb-4">
+              <label class="block text-goldAccent font-semibold mb-2" for="name">Name</label>
+              <input type="text" name="name" id="name" class="w-full px-3 py-2 rounded border border-goldAccent bg-zinc-800 text-goldAccent placeholder-goldLighter focus:outline-none focus:ring-2 focus:ring-goldAccent" required />
             </div>
-            <div class="flex justify-end gap-2 mt-4">
+            <div class="flex justify-end gap-2">
               <button type="button" onclick="document.getElementById('additemModal').classList.add('hidden')" class="px-4 py-2 rounded bg-zinc-700 text-goldAccent border border-goldAccent hover:bg-zinc-800">Close</button>
-              <button type="submit" name="add" class="px-4 py-2 rounded bg-goldAccent text-zinc-900 font-bold border border-goldAccent hover:bg-goldDark">Add Item</button>
+              <button type="submit" name="add" class="px-4 py-2 rounded bg-goldAccent text-zinc-900 font-bold border border-goldAccent hover:bg-goldLight">Add</button>
             </div>
           </form>
         </div>
       </div>
-      {% endif %}
     </div>
   </div>
   <script>

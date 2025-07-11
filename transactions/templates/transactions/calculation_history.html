@@ -11,7 +11,8 @@
     </div>
     <div class="flex items-center gap-2 w-full sm:w-auto">
       <a href="{% url 'transactions_tabs' %}" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">Dashboard</a>
-      <a href="/calculation/" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">New Calc</a>
+      <a href="{% url 'calculation' %}" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">New Calc</a>
+      <a href="{% url 'calculation_history_pdf' %}" class="w-full sm:w-auto px-3 py-1 rounded font-bold border-2 border-goldAccent bg-goldAccent text-zinc-900 hover:bg-goldLight shadow transition-colors text-sm text-center">Download All PDF</a>
     </div>
   </div>
   {% if calc_saved %}
@@ -43,9 +44,7 @@
           <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">{{ calc.total }}</td>
           <td class="py-2 px-4 border-b border-gold/30 text-xs sm:text-sm">
             <a href="{% url 'calculation_pdf' %}?id={{ calc.id }}" class="w-full sm:w-auto px-2 py-1 rounded bg-goldAccent text-zinc-900 font-bold border border-goldAccent hover:bg-goldDark transition">Print/Export PDF</a>
-            {% if request.session.role != 'viewer' %}
             <a href="{% url 'delete_calculation_history' calc.id %}" class="w-full sm:w-auto px-2 py-1 rounded bg-red-500 text-white font-bold border border-red-700 hover:bg-red-700 ml-2">Delete</a>
-            {% endif %}
           </td>
         </tr>
         {% empty %}

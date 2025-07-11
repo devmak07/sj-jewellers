@@ -12,8 +12,6 @@ def index(request):
     query=""
     
     if request.method=='POST':
-        if request.session.get('role') == 'viewer':
-            return HttpResponse('Viewers cannot modify data.', status=403)
         if "add" in request.POST:
             name=request.POST.get('name')
             touch=request.POST.get('touch')
@@ -65,8 +63,6 @@ def index(request):
 
 @csrf_exempt
 def download_merchants_pdf(request):
-    if request.session.get('role') == 'viewer':
-        return HttpResponse('Viewers cannot download PDF.', status=403)
     if request.method == 'POST':
         ids = request.POST.getlist('merchant_ids')
         merchants = Merchant.objects.filter(id__in=ids)
@@ -78,40 +74,3 @@ def download_merchants_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="merchants.pdf"'
     pisa.CreatePDF(html, dest=response)
     return response
-
-# def index(request):
-#     merchant=Merchant.objects.all()
-#     if request.method == 'POST':
-#         if "add" in request.POST:
-#                 name=request.POST.get('name')
-#                 touch=request.POST.get('touch')
-#                 Netwet=request.POST.get('Netwet')
-#                 Gowet=request.POST.get('Gowet')
-#                 pc=request.POST.get('PC')
-#                 Item=request.POST.get('Item')
-#                 Merchant.objects.create(
-#                     name=name,
-#                     touch=touch,
-#                     Netwet=Netwet,
-#                     Gowet=Gowet,
-#                     PC=pc,
-#                     Item=Item
-#                 )
-#                 messages.success(request,"Item added successfully")
-
-#     elif "update" in request.POST:
-#         merchant_id = request.POST.get('id')
-#         merchant_obj = Merchant.objects.get(id=merchant_id)
-#         merchant_obj.name = request.POST.get('name')
-#         merchant_obj.touch = request.POST.get('touch')
-#         merchant_obj.Netwet = request.POST.get('Netwet')
-#         merchant_obj.Gowet = request.POST.get('Gowet')
-#         merchant_obj.PC = request.POST.get('PC')
-#         merchant_obj.Item = request.POST.get('Item')
-#         merchant_obj.save()
-#         messages.success(request, "Item updated successfully")
-
-#     elif "delete" in request.POST:
-#         merchant_id = request.POST.get('id')
-#         Merchant.objects.filter(id=merchant_id).delete()
-#         messages.success(request, "Item deleted successfully")

@@ -22,20 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-im!2kks6hrccpoh%tt29cxukp$be(_peb$y984dlnkt3#t0@t%')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-im!2kks6hrccpoh%tt29cxukp$be(_peb$y984dlnkt3#t0@t%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
-# Render/production security settings
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True      # Set to True for production
-CSRF_COOKIE_SECURE = True        # Set to True for production
-SESSION_COOKIE_SAMESITE = 'Lax'
-CSRF_TRUSTED_ORIGINS = ['https://sj-jewellers.onrender.com']  # Replace with your actual Render URL if different
-SECURE_SSL_REDIRECT = True       # Optional, but recommended
+SESSION_COOKIE_SECURE=False
+CSRF_COOKIE_SECURE= False
+
 
 # (Optional, but recommended for production)
 SECURE_BROWSER_XSS_FILTER = True
@@ -93,9 +89,14 @@ WSGI_APPLICATION = 'goldbook.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}'
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('DB_NAME', 'sjbook'),
+        'USER': os.environ.get('DB_USER', 'jagdish'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'jagdish@123'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '3306'),
+    }
 }
 
 
